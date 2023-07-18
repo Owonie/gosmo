@@ -1,18 +1,19 @@
 import FontAwesome from '@expo/vector-icons/FontAwesome';
+import {
+  Feather,
+  MaterialCommunityIcons,
+  FontAwesome5,
+  AntDesign,
+} from '@expo/vector-icons';
 import { Link, Tabs } from 'expo-router';
 import { Pressable, useColorScheme } from 'react-native';
 
 import Colors from '../../constants/Colors';
+import { View } from '../../components/Themed';
 
 /**
  * You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
  */
-function TabBarIcon(props: {
-  name: React.ComponentProps<typeof FontAwesome>['name'];
-  color: string;
-}) {
-  return <FontAwesome size={28} style={{ marginBottom: -3 }} {...props} />;
-}
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
@@ -21,19 +22,23 @@ export default function TabLayout() {
     <Tabs
       screenOptions={{
         tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
-      }}>
+      }}
+    >
       <Tabs.Screen
-        name="index"
+        name='index'
         options={{
-          title: 'Tab One',
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+          title: 'Home',
+          tabBarIcon: ({ color }) => (
+            <Feather name='home' size={24} color={color} />
+          ),
+
           headerRight: () => (
-            <Link href="/modal" asChild>
+            <Link href='/modal' asChild>
               <Pressable>
                 {({ pressed }) => (
-                  <FontAwesome
-                    name="info-circle"
-                    size={25}
+                  <AntDesign
+                    name='shoppingcart'
+                    size={24}
                     color={Colors[colorScheme ?? 'light'].text}
                     style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
                   />
@@ -44,10 +49,25 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="two"
+        name='collect'
         options={{
-          title: 'Tab Two',
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+          title: 'Collect',
+          tabBarIcon: ({ color }) => (
+            <MaterialCommunityIcons
+              name='star-box-multiple-outline'
+              size={24}
+              color={color}
+            />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name='my'
+        options={{
+          title: 'My',
+          tabBarIcon: ({ color }) => (
+            <FontAwesome5 name='user-circle' size={24} color={color} />
+          ),
         }}
       />
     </Tabs>
