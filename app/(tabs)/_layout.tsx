@@ -31,7 +31,7 @@ export default function TabLayout() {
           ),
 
           headerRight: () => (
-            <Link href='/modal' asChild>
+            <Link href='/shopModal' asChild>
               <Pressable>
                 {({ pressed }) => (
                   <AntDesign
