@@ -1,19 +1,24 @@
 import { AntDesign } from '@expo/vector-icons';
-import { StyleSheet, Pressable, ScrollView } from 'react-native';
+import { StyleSheet, Pressable, Image } from 'react-native';
 import { Link } from 'expo-router';
 import SelectDropdown from 'react-native-select-dropdown';
 import { Text, View } from '../../components/Themed';
-import NFTCard from '../../components/collect/NFTCard';
 import useGetCollection from '../../hooks/useGetCollection';
 import Collection from '../../components/collect/Collection';
-import { CollectionData } from '../../type/objekt';
 
-const countries = ['Heejin', 'HaSeul', 'KimLip', 'JinSoul', 'Choerry', 'Gowon'];
-
+const members = ['Heejin', 'HaSeul', 'KimLip', 'JinSoul', 'Choerry', 'Gowon'];
+const memberImages = {
+  Heejin: require('../../assets/images/icons/HeeJin.webp'),
+  JinSoul: require('../../assets/images/icons/JinSoul.webp'),
+  HaSeul: require('../../assets/images/icons/HaSeul.webp'),
+  KimLip: require('../../assets/images/icons/KimLip.webp'),
+  Choerry: require('../../assets/images/icons/Choerry.webp'),
+};
 export default function CollectScreen() {
   const { data, loading, error } = useGetCollection(
     '0x3945fCd6d9E83Aebf33B2e58F7720b9Ea34c11D8'
   );
+
   if (loading) {
     return <Text>Loading...</Text>;
   } else {
@@ -26,22 +31,22 @@ export default function CollectScreen() {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <SelectDropdown
-          data={countries}
-          onSelect={(selectedItem, index) => {
-            console.log(selectedItem, index);
-          }}
-          buttonTextAfterSelection={(selectedItem, index) => {
-            // text represented after item is selected
-            // if data array is an array of objects then return selectedItem.property to render after item is selected
-            return selectedItem;
-          }}
-          rowTextForSelection={(item, index) => {
-            // text represented for each item in dropdown
-            // if data array is an array of objects then return item.property to represent item in dropdown
-            return item;
-          }}
-        />
+        <View style={headerStyles.dropdown}>
+          <SelectDropdown
+            data={members}
+            onSelect={(selectedItem, index) => console.log(selectedItem, index)}
+            buttonTextAfterSelection={(selectedItem, index) => {
+              // text represented after item is selected
+              // if data array is an array of objects then return selectedItem.property to render after item is selected
+              return selectedItem;
+            }}
+            rowTextForSelection={(item, index) => {
+              // text represented for each item in dropdown
+              // if data array is an array of objects then return item.property to represent item in dropdown
+              return item;
+            }}
+          />
+        </View>
         <Link href='/cardModal' asChild>
           <Pressable>
             {({ pressed }) => (
@@ -58,13 +63,10 @@ export default function CollectScreen() {
           </Pressable>
         </Link>
       </View>
-      <View
-        style={styles.separator}
-        lightColor='#eee'
-        darkColor='rgba(255,255,255,0.1)'
-      />
-      {/* @ts-ignore */}
-      <Collection collectionData={data} />
+      <View style={styles.content}>
+        {/* @ts-ignore */}
+        <Collection collectionData={data} />
+      </View>
     </View>
   );
 }
@@ -76,7 +78,7 @@ const styles = StyleSheet.create({
     margin: 20,
   },
   header: {
-    flex: 1,
+    flex: 0.14,
     flexDirection: 'row',
     padding: 5,
   },
@@ -84,9 +86,19 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
   },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: '80%',
+  content: {
+    flex: 0.86,
   },
+});
+
+const headerStyles = StyleSheet.create({
+  dropdown: {
+    flex: 1,
+    backgroundColor: 'black',
+    color: 'white',
+  },
+  filter: {},
+  collectionNumber: {},
+  orderBy: {},
+  content: {},
 });

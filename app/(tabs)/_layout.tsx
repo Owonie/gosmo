@@ -29,6 +29,7 @@ export default function TabLayout() {
           tabBarIcon: ({ color }) => (
             <Feather name='home' size={24} color={color} />
           ),
+          headerTitleAlign: 'left',
 
           headerRight: () => (
             <Link href='/shopModal' asChild>
@@ -57,6 +58,7 @@ export default function TabLayout() {
               color={color}
             />
           ),
+          headerTitleAlign: 'left',
         }}
       />
       <Tabs.Screen
@@ -66,6 +68,7 @@ export default function TabLayout() {
           tabBarIcon: ({ color }) => (
             <FontAwesome5 name='user-circle' size={24} color={color} />
           ),
+          headerTitleAlign: 'left',
         }}
       />
     </Tabs>
