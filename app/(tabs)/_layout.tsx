@@ -20,6 +20,10 @@ export default function TabLayout() {
     <Tabs
       screenOptions={{
         tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
+        headerStyle: {
+          backgroundColor: 'black', // 헤더의 배경색을 검은색으로 설정
+        },
+        headerTintColor: 'white', // 헤더의 글자색을 흰색으로 설정 (예시로 흰색 지정, 필요에 따라 다른 색상 사용 가능)
       }}
     >
       <Tabs.Screen

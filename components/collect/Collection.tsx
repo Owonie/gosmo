@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
   },
   textOverlay: {
     fontSize: 7,
-    bottom: 35,
+    bottom: 32,
     fontWeight: '700',
     borderRadius: 4,
     color: 'black',
@@ -71,7 +71,7 @@ const styles = StyleSheet.create({
   },
   textOverlayNo: {
     fontSize: 7,
-    bottom: 15,
+    bottom: 20,
     borderRadius: 4,
     color: 'grey',
     transform: [{ rotate: '90deg' }],
