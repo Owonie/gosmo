@@ -63,6 +63,20 @@ export default function TabLayout() {
             />
           ),
           headerTitleAlign: 'left',
+          headerRight: () => (
+            <Link href='/shopModal' asChild>
+              <Pressable>
+                {({ pressed }) => (
+                  <MaterialCommunityIcons
+                    name='qrcode-scan'
+                    size={24}
+                    color={Colors[colorScheme ?? 'light'].text}
+                    style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
+                  />
+                )}
+              </Pressable>
+            </Link>
+          ),
         }}
       />
       <Tabs.Screen

@@ -52,7 +52,7 @@ const styles = StyleSheet.create({
     width: '100%',
     height: 170,
     resizeMode: 'cover',
-    borderRadius: 4,
+    borderRadius: 7,
   },
   textContainer: {
     width: 20,
