@@ -1,33 +1,70 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { View, StyleSheet, Image, Text, ScrollView } from 'react-native';
-import { CollectionData } from '../../type/objekt';
+import { CollectionData, NFTObjekt } from '../../type/objekt';
 
 interface CollectionProps {
   collectionData: CollectionData;
+  categoryKey: string;
+  orderbyKey: string;
 }
 
-const Collection: React.FC<CollectionProps> = ({ collectionData }) => {
+const Collection: React.FC<CollectionProps> = ({
+  collectionData,
+  categoryKey,
+  orderbyKey,
+}) => {
+  const filteredCollections = useMemo(() => {
+    if (!Array.isArray(collectionData.ownedNfts) || !categoryKey) {
+      return [];
+    }
+    if (categoryKey === 'ARTMS') {
+      return collectionData.ownedNfts;
+    }
+    return collectionData.ownedNfts.filter(
+      (collection) => collection.metadata?.objekt.member === categoryKey
+    );
+  }, [categoryKey]);
+
+  const orderByCollections = useMemo(() => {
+    if (!Array.isArray(filteredCollections) || !orderbyKey) {
+      return [];
+    }
+
+    return filteredCollections.sort((a, b) => {
+      if (orderbyKey === '최신순') {
+        return a.acquiredAt.blockNumber - b.acquiredAt.blockNumber;
+      } else if (orderbyKey === '오래된 순') {
+        return b.acquiredAt.blockNumber - a.acquiredAt.blockNumber;
+      }
+    });
+  }, [categoryKey, orderbyKey]);
+
   return (
-    <ScrollView style={styles.scroll}>
-      <View style={styles.cardContainer}>
-        {collectionData.ownedNfts.map((collection, index) => (
-          <View key={index} style={[styles.card]}>
-            <Image
-              source={{ uri: collection.media[0].raw }}
-              style={styles.image}
-            />
-            <View style={styles.textContainer}>
-              <Text style={styles.textOverlay}>
-                {collection.metadata.objekt.collectionNo}
-              </Text>
-              <Text style={styles.textOverlayNo}>
-                #{collection.metadata.objekt.objektNo}
-              </Text>
+    <View>
+      <Text style={{ color: 'white', bottom: 15, left: 10 }}>
+        총 {filteredCollections.length}개
+      </Text>
+      <ScrollView style={styles.scroll}>
+        <View style={styles.cardContainer}>
+          {orderByCollections.map((collection, index) => (
+            <View key={index} style={[styles.card]}>
+              <Image
+                source={{ uri: collection.media[0].raw }}
+                style={styles.image}
+              />
+              <View style={styles.textContainer}>
+                <Text style={styles.textOverlay}>
+                  {collection.metadata.objekt.collectionNo}
+                </Text>
+                <Text style={styles.textOverlayNo}>
+                  #{collection.metadata.objekt.objektNo}
+                </Text>
+              </View>
             </View>
-          </View>
-        ))}
-      </View>
-    </ScrollView>
+          ))}
+        </View>
+      </ScrollView>
+    </View>
   );
 };
 

@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import axios, { AxiosResponse } from 'axios';
+import { CollectionData } from '../type/objekt';
 
 interface UseAxiosResponse<T> {
   data: T | null;

@@ -1,14 +1,15 @@
-import { AntDesign, FontAwesome } from '@expo/vector-icons';
+import { AntDesign } from '@expo/vector-icons';
 import { StyleSheet, Pressable, Image } from 'react-native';
 import { Link } from 'expo-router';
 import SelectDropdown from 'react-native-select-dropdown';
 import { Text, View } from '../../components/Themed';
 import useGetCollection from '../../hooks/useGetCollection';
 import Collection from '../../components/collect/Collection';
+import { useState } from 'react';
 
 const members = [
   'ARTMS',
-  'Heejin',
+  'HeeJin',
   'HaSeul',
   'KimLip',
   'JinSoul',
@@ -18,7 +19,7 @@ const members = [
 
 const order = ['최신순', '오래된 순', '낮은 번호순', '높은 번호순'];
 const memberImages: { [key: string]: any } = {
-  Heejin: require('../../assets/images/icons/HeeJin.webp'),
+  HeeJin: require('../../assets/images/icons/HeeJin.webp'),
   JinSoul: require('../../assets/images/icons/JinSoul.webp'),
   HaSeul: require('../../assets/images/icons/HaSeul.webp'),
   KimLip: require('../../assets/images/icons/KimLip.webp'),
@@ -28,6 +29,9 @@ const memberImages: { [key: string]: any } = {
 };
 
 export default function CollectScreen() {
+  const [categoryKey, setCategoryKey] = useState('ARTMS');
+  const [orderbyKey, setOrderbyKey] = useState('최신순');
+
   const { data, loading, error } = useGetCollection(
     '0x3945fCd6d9E83Aebf33B2e58F7720b9Ea34c11D8'
   );
@@ -55,9 +59,7 @@ export default function CollectScreen() {
                 height: 55,
                 borderBottomWidth: 0,
               }}
-              onSelect={(selectedItem, index) =>
-                console.log(selectedItem, index)
-              }
+              onSelect={(selectedItem, index) => setCategoryKey(selectedItem)}
               buttonTextAfterSelection={(selectedItem, index) => {
                 return selectedItem;
               }}
@@ -100,8 +102,9 @@ export default function CollectScreen() {
                   size={22}
                   style={{
                     margin: 5,
+                    marginHorizontal: 15,
                     paddingVertical: 10,
-                    paddingHorizontal: 15,
+                    paddingHorizontal: 5,
                     opacity: pressed ? 0.5 : 1,
                     color: '#a6a6a6',
                     height: 28,
@@ -113,76 +116,73 @@ export default function CollectScreen() {
         </View>
         <View
           style={{
-            flex: 0.2,
+            position: 'absolute',
+            top: 75,
             flexDirection: 'row',
             justifyContent: 'space-between',
-            paddingHorizontal: 10,
+            marginLeft: 220,
+            right: 0,
           }}
         >
-          <Text>총 60개</Text>
-          <View
-            style={{
-              flex: 1,
-              flexDirection: 'row',
-              justifyContent: 'flex-end',
-              marginLeft: 200,
-              left: 10,
+          <SelectDropdown
+            buttonStyle={{
+              padding: 5,
+              width: 100,
+              height: 25,
+              paddingHorizontal: 10,
+              backgroundColor: 'black',
+              borderBottomWidth: 0,
+              bottom: 5,
+              right: 2,
             }}
-          >
-            <SelectDropdown
-              buttonStyle={{
-                width: 100,
-                height: 15,
-                backgroundColor: 'black',
-                borderBottomWidth: 0,
-              }}
-              buttonTextStyle={{
-                color: 'white',
-                fontSize: 10,
-                fontWeight: '600',
-              }}
-              dropdownStyle={{
-                borderRadius: 13,
-              }}
-              rowStyle={{
-                width: 100,
-                height: 55,
-                borderBottomWidth: 0,
-              }}
-              rowTextStyle={{
-                color: 'black',
-                fontSize: 10,
-                fontWeight: '600',
-              }}
-              data={order}
-              onSelect={(selectedItem, index) =>
-                console.log(selectedItem, index)
-              }
-              buttonTextAfterSelection={(selectedItem, index) => {
-                return selectedItem;
-              }}
-              rowTextForSelection={(item, index) => {
-                return item;
-              }}
-              defaultValue={'latest'}
-            />
+            buttonTextStyle={{
+              color: 'white',
+              fontSize: 10,
+              fontWeight: '600',
+            }}
+            dropdownStyle={{
+              borderRadius: 13,
+            }}
+            rowStyle={{
+              width: 100,
+              height: 55,
+              borderBottomWidth: 0,
+            }}
+            rowTextStyle={{
+              color: 'black',
+              fontSize: 10,
+              fontWeight: '600',
+            }}
+            data={order}
+            onSelect={(selectedItem, index) => setOrderbyKey(selectedItem)}
+            buttonTextAfterSelection={(selectedItem, index) => {
+              return selectedItem;
+            }}
+            rowTextForSelection={(item, index) => {
+              return item;
+            }}
+            defaultValue={'latest'}
+          />
 
-            <AntDesign
-              name='down'
-              size={12}
-              style={{
-                color: 'white',
-                position: 'absolute',
-                top: 1,
-                left: 75,
-              }}
-            />
-          </View>
+          <AntDesign
+            name='down'
+            size={12}
+            style={{
+              color: 'white',
+              position: 'absolute',
+              top: 1,
+              left: 75,
+            }}
+          />
         </View>
       </View>
       <View style={styles.content}>
-        {/* @ts-ignore */}
-        <Collection collectionData={data} />
+        <Collection
+          // @ts-ignore
+          collectionData={data}
+          categoryKey={categoryKey}
+          orderbyKey={orderbyKey}
+        />
       </View>
     </View>
   );
@@ -195,7 +195,7 @@ const styles = StyleSheet.create({
     margin: 20,
   },
   header: {
-    flex: 0.14,
+    flex: 0.12,
     padding: 5,
     bottom: 10,
   },
@@ -204,7 +204,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   content: {
-    flex: 0.86,
+    flex: 0.88,
   },
   iconImage: {
     width: 35,
