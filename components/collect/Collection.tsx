@@ -25,12 +25,11 @@ const Collection: React.FC<CollectionProps> = ({
     );
   }, [categoryKey]);
 
-  const orderByCollections = useMemo(() => {
+  const orderByCollections: NFTObjekt[] = useMemo(() => {
     if (!Array.isArray(filteredCollections) || !orderbyKey) {
       return [];
     }
-
-    return filteredCollections.sort((a, b) => {
+    return filteredCollections.sort((a: NFTObjekt, b: NFTObjekt): number => {
       if (orderbyKey === '최신순') {
         return a.acquiredAt.blockNumber - b.acquiredAt.blockNumber;
       } else if (orderbyKey === '오래된 순') {

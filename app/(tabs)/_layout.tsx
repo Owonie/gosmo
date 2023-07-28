@@ -8,7 +8,7 @@ import { Link, Tabs } from 'expo-router';
 import { Pressable, useColorScheme } from 'react-native';
 
 import Colors from '../../constants/Colors';
-
+import { View } from '../../components/Themed';
 /**
  * You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
  */
@@ -64,15 +64,17 @@ export default function TabLayout() {
           ),
           headerTitleAlign: 'left',
           headerRight: () => (
-            <Link href='/shopModal' asChild>
+            <Link href='/cameraModal' asChild>
               <Pressable>
                 {({ pressed }) => (
-                  <MaterialCommunityIcons
-                    name='qrcode-scan'
-                    size={24}
-                    color={Colors[colorScheme ?? 'light'].text}
-                    style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
-                  />
+                  <View>
+                    <MaterialCommunityIcons
+                      name='qrcode-scan'
+                      size={24}
+                      color={Colors[colorScheme ?? 'light'].text}
+                      style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
+                    />
+                  </View>
                 )}
               </Pressable>
             </Link>

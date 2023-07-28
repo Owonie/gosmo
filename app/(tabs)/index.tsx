@@ -5,6 +5,8 @@ import Feed from '../../components/home/Feed';
 import Stan from '../../components/home/Stan';
 import Gravity from '../../components/home/Gravity';
 
+import { Camera, CameraType } from 'expo-camera';
+
 const FirstRoute = () => <Feed />;
 const SecondRoute = () => <Stan />;
 const ThirdRoute = () => <Gravity />;
@@ -16,6 +18,15 @@ const renderScene = SceneMap({
 });
 
 export default function HomeScreen() {
+  const [type, setType] = React.useState(CameraType.back);
+  const [permission, requestPermission] = Camera.useCameraPermissions();
+
+  function toggleCameraType() {
+    setType((current) =>
+      current === CameraType.back ? CameraType.front : CameraType.back
+    );
+  }
+
   const renderTabBar = (props: any) => (
     <TabBar
       {...props}
