@@ -1,69 +1,94 @@
-import { Camera, CameraType } from 'expo-camera';
-import { useState } from 'react';
-import { Button, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { Text, View, StyleSheet, Button } from 'react-native';
+import { BarCodeScanner } from 'expo-barcode-scanner';
+import * as Linking from 'expo-linking';
 
+interface BarCodeEvent {
+  type: string;
+  data: string;
+}
 export default function App() {
-  const [type, setType] = useState(CameraType.back);
-  const [permission, requestPermission] = Camera.useCameraPermissions();
+  const [hasPermission, setHasPermission] = useState<boolean | null>(null);
+  const [scanned, setScanned] = useState(false);
 
-  if (!permission) {
-    // Camera permissions are still loading
-    return <View />;
+  useEffect(() => {
+    (async () => {
+      const { status } = await BarCodeScanner.requestPermissionsAsync();
+      setHasPermission(status === 'granted');
+    })();
+  }, []);
+
+  const handleBarCodeScanned = ({ type, data }: BarCodeEvent) => {
+    setScanned(true);
+    Linking.openURL(data);
+  };
+
+  if (hasPermission === null) {
+    return <Text>Requesting for camera permission</Text>;
   }
-
-  if (!permission.granted) {
-    // Camera permissions are not granted yet
-    return (
-      <View style={styles.container}>
-        <Text style={{ textAlign: 'center' }}>
-          We need your permission to show the camera
-        </Text>
-        <Button onPress={requestPermission} title='grant permission' />
-      </View>
-    );
-  }
-
-  function toggleCameraType() {
-    setType((current) =>
-      current === CameraType.back ? CameraType.front : CameraType.back
-    );
+  if (hasPermission === false) {
+    return <Text>No access to camera</Text>;
   }
 
   return (
     <View style={styles.container}>
-      <Camera style={styles.camera} type={type}>
-        <View style={styles.buttonContainer}>
-          <TouchableOpacity style={styles.button} onPress={toggleCameraType}>
-            <Text style={styles.text}>Flip Camera</Text>
-          </TouchableOpacity>
+      <BarCodeScanner
+        onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
+        style={StyleSheet.absoluteFillObject}
+      />
+      <View style={styles.layerTop} />
+      <View style={styles.layerCenter}>
+        <View style={styles.layerLeft} />
+        <View style={styles.focused} />
+        <View style={styles.layerRight} />
+      </View>
+      <View style={styles.layerBottom}>
+        <View style={styles.textWrapper}>
+          <Text style={styles.text}>Objekt 뒷면의 QR코드를</Text>
+          <Text style={styles.text}>스캔해주세요</Text>
         </View>
-      </Camera>
+      </View>
     </View>
   );
 }
 
+const opacity = 'rgba(0, 0, 0, .6)';
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
+    flexDirection: 'column',
   },
-  camera: {
-    flex: 1,
+  layerTop: {
+    flex: 0.4,
+    backgroundColor: opacity,
   },
-  buttonContainer: {
+  layerCenter: {
     flex: 1,
     flexDirection: 'row',
-    backgroundColor: 'transparent',
-    margin: 64,
   },
-  button: {
+  layerLeft: {
+    flex: 1.5,
+    backgroundColor: opacity,
+  },
+  focused: {
+    flex: 10,
+  },
+  layerRight: {
+    flex: 1.5,
+    backgroundColor: opacity,
+  },
+  layerBottom: {
     flex: 1,
-    alignSelf: 'flex-end',
-    alignItems: 'center',
+    backgroundColor: opacity,
   },
   text: {
-    fontSize: 24,
-    fontWeight: 'bold',
     color: 'white',
+    fontSize: 23,
+    fontWeight: '600',
+  },
+  textWrapper: {
+    margin: 20,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
