@@ -11,6 +11,5 @@ COSMO 앱을 밴치마킹해서 만든 클론 앱 GOSMO입니다.
   <img src="https://github.com/Owonie/gosmo/assets/70142275/5bf3593b-0cf3-45a9-aa6c-fad2bbdc848c)" align="center" width="32%">
   <img src="https://github.com/Owonie/gosmo/assets/70142275/88662464-f535-414e-baf6-2e318581a745" align="center" width="32%">
   <img src="https://github.com/Owonie/gosmo/assets/70142275/ad52394f-4e03-42e8-a825-3d92a5c121cc" align="center" width="32%">
-  <figcaption align="center">3개 이미지 띄우기</figcaption>
 </p>
 
